@@ -12,6 +12,7 @@ dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.8
+  flutter_secure_storage: ^5.0.2  # Add this dependency for secure storage
 
 dev_dependencies:
   flutter_test:
