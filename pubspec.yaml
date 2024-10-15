@@ -1,23 +1,23 @@
 name: my_cst2335_labs
 description: "A new Flutter project."
-publish_to: 'none'
+publish_to: 'none' # Prevents the package from being accidentally published to pub.dev
 
 version: 1.0.0+1
 
 environment:
   sdk: ">=2.17.0 <3.0.0"
 
-
 dependencies:
   flutter:
     sdk: flutter
-  cupertino_icons: ^1.0.8
-  flutter_secure_storage: ^5.0.2  # Add this dependency for secure storage
+  cupertino_icons: ^1.0.8 # Cupertino icons used in iOS-specific UIs
+  flutter_secure_storage: ^5.0.2 # For secure storage of key-value pairs
+  url_launcher: ^6.0.20 # For launching URLs (e.g., SMS, email, etc.)
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^4.0.0
+  flutter_lints: ^4.0.0 # Linting package to enforce best practices
 
 flutter:
   uses-material-design: true
