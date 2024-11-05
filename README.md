@@ -1,4 +1,4 @@
-# my_cst2335_labs
+# final_project
 
 A new Flutter project.
 
