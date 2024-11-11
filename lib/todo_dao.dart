@@ -1,6 +1,5 @@
 import 'package:floor/floor.dart';
-import 'package:my_cst2335_labs/todo_item.dart';
-
+import 'package:final_proj/todo_item.dart';
 
 @dao
 abstract class TodoDao {

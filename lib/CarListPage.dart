@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:floor/floor.dart';
 import 'package:shared_preferences/shared_preferences.dart';

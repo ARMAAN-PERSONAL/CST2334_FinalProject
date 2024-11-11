@@ -74,6 +74,8 @@ class _$AppDatabase extends AppDatabase {
 
   TodoDao? _todoDaoInstance;
 
+  CarDao? _carDaoInstance;
+
   Future<sqflite.Database> open(
     String path,
     List<Migration> migrations, [
@@ -97,6 +99,8 @@ class _$AppDatabase extends AppDatabase {
       onCreate: (database, version) async {
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `TodoItem` (`id` INTEGER, `task` TEXT NOT NULL, PRIMARY KEY (`id`))');
+        await database.execute(
+            'CREATE TABLE IF NOT EXISTS `cars` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `brand` TEXT NOT NULL, `model` TEXT NOT NULL, `passengerCount` INTEGER NOT NULL, `capacity` REAL NOT NULL)');
 
         await callback?.onCreate?.call(database, version);
       },
@@ -107,6 +111,11 @@ class _$AppDatabase extends AppDatabase {
   @override
   TodoDao get todoDao {
     return _todoDaoInstance ??= _$TodoDao(database, changeListener);
+  }
+
+  @override
+  CarDao get carDao {
+    return _carDaoInstance ??= _$CarDao(database, changeListener);
   }
 }
 
@@ -152,5 +161,82 @@ class _$TodoDao extends TodoDao {
   @override
   Future<void> deleteTodoItem(TodoItem todoItem) async {
     await _todoItemDeletionAdapter.delete(todoItem);
+  }
+}
+
+class _$CarDao extends CarDao {
+  _$CarDao(
+    this.database,
+    this.changeListener,
+  )   : _queryAdapter = QueryAdapter(database),
+        _carItemInsertionAdapter = InsertionAdapter(
+            database,
+            'cars',
+            (CarItem item) => <String, Object?>{
+                  'id': item.id,
+                  'brand': item.brand,
+                  'model': item.model,
+                  'passengerCount': item.passengerCount,
+                  'capacity': item.capacity
+                }),
+        _carItemUpdateAdapter = UpdateAdapter(
+            database,
+            'cars',
+            ['id'],
+            (CarItem item) => <String, Object?>{
+                  'id': item.id,
+                  'brand': item.brand,
+                  'model': item.model,
+                  'passengerCount': item.passengerCount,
+                  'capacity': item.capacity
+                }),
+        _carItemDeletionAdapter = DeletionAdapter(
+            database,
+            'cars',
+            ['id'],
+            (CarItem item) => <String, Object?>{
+                  'id': item.id,
+                  'brand': item.brand,
+                  'model': item.model,
+                  'passengerCount': item.passengerCount,
+                  'capacity': item.capacity
+                });
+
+  final sqflite.DatabaseExecutor database;
+
+  final StreamController<String> changeListener;
+
+  final QueryAdapter _queryAdapter;
+
+  final InsertionAdapter<CarItem> _carItemInsertionAdapter;
+
+  final UpdateAdapter<CarItem> _carItemUpdateAdapter;
+
+  final DeletionAdapter<CarItem> _carItemDeletionAdapter;
+
+  @override
+  Future<List<CarItem>> findAllCars() async {
+    return _queryAdapter.queryList('SELECT * FROM cars',
+        mapper: (Map<String, Object?> row) => CarItem(
+            id: row['id'] as int?,
+            brand: row['brand'] as String,
+            model: row['model'] as String,
+            passengerCount: row['passengerCount'] as int,
+            capacity: row['capacity'] as double));
+  }
+
+  @override
+  Future<void> insertCar(CarItem car) async {
+    await _carItemInsertionAdapter.insert(car, OnConflictStrategy.abort);
+  }
+
+  @override
+  Future<void> updateCar(CarItem car) async {
+    await _carItemUpdateAdapter.update(car, OnConflictStrategy.abort);
+  }
+
+  @override
+  Future<void> deleteCar(CarItem car) async {
+    await _carItemDeletionAdapter.delete(car);
   }
 }

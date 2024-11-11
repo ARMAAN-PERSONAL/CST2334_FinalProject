@@ -1,4 +1,4 @@
-name: final_project
+name: final_proj
 description: "A new Flutter project."
 publish_to: 'none'
 
@@ -13,6 +13,7 @@ dependencies:
   cupertino_icons: ^1.0.8
   floor: ^1.4.0
   sqflite: ^2.2.5+1
+  shared_preferences: ^2.0.13  # or latest compatible version
 
 dev_dependencies:
   flutter_test:
